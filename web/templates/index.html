@@ -1,144 +1,608 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{.title}}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>{{.title}} - Find the Best Betting Odds in Kenya</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/static/style.css" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #10b981;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --danger-color: #dc2626;
+            --dark-color: #1f2937;
+            --light-color: #f8fafc;
+            --border-radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding-bottom: 2rem;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: var(--shadow);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color) !important;
+        }
+
+        .container-main {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            margin-top: 2rem;
+            padding: 2rem;
+        }
+
+        .stats-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
         .odds-card {
-            transition: transform 0.2s;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border: none;
+            overflow: hidden;
         }
+
         .odds-card:hover {
-            transform: translateY(-2px);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
         }
-        .best-odds {
-            background: linear-gradient(45deg, #28a745, #20c997);
+
+        .card-header {
+            background: linear-gradient(135deg, var(--dark-color), #374151) !important;
+            color: white !important;
+            border: none !important;
+            padding: 1.25rem;
+        }
+
+        .match-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .match-league {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .odds-container {
+            padding: 1.5rem;
+        }
+
+        .odds-button {
+            background: linear-gradient(135deg, var(--success-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .odds-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .odds-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .odds-button:hover::before {
+            left: 100%;
+        }
+
+        .odds-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .odds-site {
+            font-size: 0.75rem;
+            opacity: 0.9;
+            margin-bottom: 0.25rem;
+        }
+
+        .odds-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-refresh {
+            background: linear-gradient(135deg, var(--primary-color), #3b82f6);
+            border: none;
+            border-radius: 50px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-refresh:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            background: linear-gradient(135deg, #1d4ed8, var(--primary-color));
+        }
+
+        .loading-spinner {
+            display: none;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-content {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .no-data-container {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--dark-color);
+        }
+
+        .no-data-icon {
+            font-size: 4rem;
+            color: var(--warning-color);
+            margin-bottom: 1rem;
+        }
+
+        .filter-tabs {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 0.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .filter-tab {
+            background: transparent;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: var(--dark-color);
+        }
+
+        .filter-tab.active {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            border: 2px solid #e5e7eb;
+            border-radius: 50px;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            outline: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 10000;
+        }
+
+        .toast {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            border: none;
+        }
+
+        .footer-info {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 3rem;
+            text-align: center;
             color: white;
         }
-        .loading {
-            display: none;
+
+        @media (max-width: 768px) {
+            .container-main {
+                margin: 1rem;
+                padding: 1rem;
+            }
+            
+            .stats-number {
+                font-size: 2rem;
+            }
+            
+            .odds-value {
+                font-size: 1.2rem;
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
+
 <body>
-    <nav class="navbar navbar-dark bg-dark">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <span class="navbar-brand mb-0 h1">🏆 Kenya Betting Odds Scraper</span>
-            <button class="btn btn-outline-light" onclick="triggerScrape()">
-                <span id="scrape-btn-text">Refresh Odds</span>
-                <span id="scrape-loading" class="loading spinner-border spinner-border-sm ms-2"></span>
-            </button>
+            <span class="navbar-brand">
+                <i class="fas fa-trophy me-2"></i>
+                Kenya Betting Odds Scraper
+            </span>
+            <div class="d-flex align-items-center">
+                <button class="btn btn-refresh me-3" onclick="triggerScrape()">
+                    <i class="fas fa-sync-alt me-2"></i>
+                    <span id="scrape-btn-text">Refresh Odds</span>
+                    <span id="scrape-loading" class="loading-spinner spinner-border spinner-border-sm ms-2"></span>
+                </button>
+                <button class="btn btn-outline-primary" onclick="toggleAutoRefresh()">
+                    <i id="auto-refresh-icon" class="fas fa-play me-1"></i>
+                    <span id="auto-refresh-text">Auto</span>
+                </button>
+            </div>
         </div>
     </nav>
 
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-12">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2>Best Odds Comparison</h2>
-                    <small class="text-muted">Last updated: <span id="last-updated">Loading...</span></small>
-                </div>
-            </div>
-        </div>
-
-        <div id="loading-spinner" class="text-center my-5">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <p class="mt-2">Loading odds data...</p>
-        </div>
-
-        <div id="odds-container" class="row" style="display: none;">
-            <!-- Odds will be populated here -->
-        </div>
-
-        <div id="no-data" class="text-center my-5" style="display: none;">
-            <h4>No odds data available</h4>
-            <p class="text-muted">Click "Refresh Odds" to scrape the latest data from betting sites.</p>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
+            <h5>Scraping Latest Odds...</h5>
+            <p class="text-muted mb-0">Please wait while we fetch the best odds from all betting sites</p>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        let oddsData = [];
+    <!-- Toast Container -->
+    <div class="toast-container"></div>
 
+    <!-- Main Content -->
+    <div class="container">
+        <div class="container-main">
+            <!-- Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="stats-card">
+                        <div class="stats-number" id="total-matches">0</div>
+                        <div class="stats-label">Total Matches</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="stats-card">
+                        <div class="stats-number" id="active-sites">4</div>
+                        <div class="stats-label">Betting Sites</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="stats-card">
+                        <div class="stats-number" id="best-odds">0</div>
+                        <div class="stats-label">Best Odds Found</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="stats-card">
+                        <div class="stats-number" id="last-update">--</div>
+                        <div class="stats-label">Minutes Ago</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="form-control search-input" id="search-input" 
+                       placeholder="Search teams, leagues, or matches..." onkeyup="filterMatches()">
+            </div>
+
+            <div class="filter-tabs d-flex flex-wrap justify-content-center">
+                <button class="filter-tab active" onclick="filterByLeague('all')">
+                    <i class="fas fa-globe me-1"></i> All Leagues
+                </button>
+                <button class="filter-tab" onclick="filterByLeague('Premier League')">
+                    <i class="fas fa-futbol me-1"></i> Premier League
+                </button>
+                <button class="filter-tab" onclick="filterByLeague('La Liga')">
+                    <i class="fas fa-star me-1"></i> La Liga
+                </button>
+                <button class="filter-tab" onclick="filterByLeague('Bundesliga')">
+                    <i class="fas fa-shield-alt me-1"></i> Bundesliga
+                </button>
+                <button class="filter-tab" onclick="filterByLeague('Serie A')">
+                    <i class="fas fa-crown me-1"></i> Serie A
+                </button>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="loading-spinner" class="text-center my-5">
+                <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
+                <h5>Loading Odds Data...</h5>
+                <p class="text-muted">Fetching the latest odds from all betting sites</p>
+            </div>
+
+            <!-- Odds Container -->
+            <div id="odds-container" class="row" style="display: none;">
+                <!-- Odds cards will be populated here -->
+            </div>
+
+            <!-- No Data State -->
+            <div id="no-data" class="no-data-container" style="display: none;">
+                <i class="fas fa-chart-line no-data-icon"></i>
+                <h4>No Odds Data Available</h4>
+                <p class="text-muted mb-4">
+                    We couldn't find any betting odds at the moment. This could be because:
+                </p>
+                <ul class="list-unstyled text-muted mb-4">
+                    <li><i class="fas fa-clock me-2"></i> Betting sites are updating their odds</li>
+                    <li><i class="fas fa-wifi me-2"></i> Network connectivity issues</li>
+                    <li><i class="fas fa-tools me-2"></i> Sites are under maintenance</li>
+                </ul>
+                <button class="btn btn-refresh" onclick="triggerScrape()">
+                    <i class="fas fa-sync-alt me-2"></i>
+                    Try Again
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer Info -->
+        <div class="footer-info">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h6><i class="fas fa-shield-alt me-2"></i>Responsible Gambling</h6>
+                    <small>Always verify odds on official sites. Gamble responsibly.</small>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h6><i class="fas fa-sync-alt me-2"></i>Auto Updates</h6>
+                    <small>Odds are automatically refreshed every 5 minutes.</small>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h6><i class="fas fa-chart-bar me-2"></i>Best Odds</h6>
+                    <small>We compare odds from 4 major Kenyan betting sites.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/app.js"></script>
+    <script></script>
+        let oddsData = [];
+        let filteredData = [];
+        let autoRefreshEnabled = true;
+        let autoRefreshInterval;
+        let lastUpdateTime = null;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            loadOdds();
+            startAutoRefresh();
+            updateTimeAgo();
+            setInterval(updateTimeAgo, 60000); // Update time every minute
+        });
+
+        // Load odds data from API
         async function loadOdds() {
             try {
+                showToast('Fetching latest odds...', 'info');
                 const response = await fetch('/api/v1/odds/best');
                 const result = await response.json();
-                
-                if (result.success && result.data.length > 0) {
+
+                if (result.success && result.data && result.data.length > 0) {
                     oddsData = result.data;
-                    displayOdds(oddsData);
-                    document.getElementById('last-updated').textContent = new Date().toLocaleString();
+                    filteredData = oddsData;
+                    displayOdds(filteredData);
+                    updateStats();
+                    lastUpdateTime = new Date();
+                    showToast(`Found ${result.data.length} matches with odds!`, 'success');
                 } else {
                     showNoData();
+                    showToast('No odds data available', 'warning');
                 }
             } catch (error) {
                 console.error('Error loading odds:', error);
                 showNoData();
+                showToast('Failed to load odds data', 'error');
             } finally {
                 hideLoading();
             }
         }
 
+        // Display odds cards
         function displayOdds(odds) {
             const container = document.getElementById('odds-container');
             container.innerHTML = '';
 
-            odds.forEach(match => {
-                const card = createMatchCard(match);
+            odds.forEach((match, index) => {
+                const card = createMatchCard(match, index);
                 container.appendChild(card);
             });
 
             container.style.display = 'block';
             document.getElementById('no-data').style.display = 'none';
+            
+            // Add fade-in animation
+            container.classList.add('fade-in');
         }
 
-        function createMatchCard(match) {
+        // Create individual match card
+        function createMatchCard(match, index) {
             const col = document.createElement('div');
-            col.className = 'col-md-6 col-lg-4 mb-4';
+            col.className = 'col-xl-4 col-lg-6 col-md-6 mb-4 match-card';
+            col.setAttribute('data-league', match.match.league);
+            col.setAttribute('data-teams', `${match.match.home_team} ${match.match.away_team}`.toLowerCase());
 
             const homeWin = match.best_home_win || {};
             const draw = match.best_draw || {};
             const awayWin = match.best_away_win || {};
 
+            // Calculate potential profit indicators
+            const maxOdds = Math.max(homeWin.value || 0, draw.value || 0, awayWin.value || 0);
+            const profitClass = maxOdds > 3 ? 'text-success' : maxOdds > 2 ? 'text-warning' : 'text-info';
+
             col.innerHTML = `
-                <div class="card odds-card h-100">
-                    <div class="card-header bg-primary text-white">
-                        <h6 class="mb-0">${match.match.home_team} vs ${match.match.away_team}</h6>
-                        <small>${match.match.league}</small>
-                    </div>
-                    <div class="card-body">
-                        <div class="row text-center">
-                            <div class="col-4">
-                                <div class="best-odds rounded p-2 mb-2">
-                                    <strong>${homeWin.value || 'N/A'}</strong>
-                                </div>
-                                <small class="text-muted">${homeWin.site_name || ''}</small>
-                                <div><small>Home Win</small></div>
-                            </div>
-                            <div class="col-4">
-                                <div class="best-odds rounded p-2 mb-2">
-                                    <strong>${draw.value || 'N/A'}</strong>
-                                </div>
-                                <small class="text-muted">${draw.site_name || ''}</small>
-                                <div><small>Draw</small></div>
-                            </div>
-                            <div class="col-4">
-                                <div class="best-odds rounded p-2 mb-2">
-                                    <strong>${awayWin.value || 'N/A'}</strong>
-                                </div>
-                                <small class="text-muted">${awayWin.site_name || ''}</small>
-                                <div><small>Away Win</small></div>
-                            </div>
+                <div class="card odds-card h-100" style="animation-delay: ${index * 0.1}s">
+                    <div class="card-header">
+                        <div class="match-title">
+                            <i class="fas fa-futbol me-2"></i>
+                            ${match.match.home_team} vs ${match.match.away_team}
+                        </div>
+                        <div class="match-league">
+                            <i class="fas fa-trophy me-1"></i>
+                            ${match.match.league}
+                            <span class="badge bg-light text-dark ms-2 ${profitClass}">
+                                Max: ${maxOdds.toFixed(2)}
+                            </span>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <small class="text-muted">
-                            Updated: ${new Date(match.updated_at).toLocaleTimeString()}
-                        </small>
+                    <div class="odds-container">
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <div class="odds-button" onclick="copyOdds('${homeWin.site_name}', ${homeWin.value}, '${match.match.home_team} Win')">
+                                    <div class="odds-value">${homeWin.value ? homeWin.value.toFixed(2) : 'N/A'}</div>
+                                    <div class="odds-site">${homeWin.site_name || 'No data'}</div>
+                                    <div class="odds-label">
+                                        <i class="fas fa-home me-1"></i>Home Win
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="odds-button" onclick="copyOdds('${draw.site_name}', ${draw.value}, 'Draw')">
+                                    <div class="odds-value">${draw.value ? draw.value.toFixed(2) : 'N/A'}</div>
+                                    <div class="odds-site">${draw.site_name || 'No data'}</div>
+                                    <div class="odds-label">
+                                        <i class="fas fa-handshake me-1"></i>Draw
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="odds-button" onclick="copyOdds('${awayWin.site_name}', ${awayWin.value}, '${match.match.away_team} Win')">
+                                    <div class="odds-value">${awayWin.value ? awayWin.value.toFixed(2) : 'N/A'}</div>
+                                    <div class="odds-site">${awayWin.site_name || 'No data'}</div>
+                                    <div class="odds-label">
+                                        <i class="fas fa-plane me-1"></i>Away Win
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-3">
+                            <small class="text-muted">
+                                <i class="fas fa-clock me-1"></i>
+                                Updated: ${new Date(match.updated_at).toLocaleTimeString()}
+                                <span class="badge bg-secondary ms-2">${match.all_odds ? match.all_odds.length : 0} sites</span>
+                            </small>
+                        </div>
                     </div>
                 </div>
             `;
@@ -146,44 +610,202 @@
             return col;
         }
 
+        // Trigger manual scrape
         async function triggerScrape() {
             const btn = document.getElementById('scrape-btn-text');
             const loading = document.getElementById('scrape-loading');
-            
+            const overlay = document.getElementById('loading-overlay');
+
             btn.textContent = 'Scraping...';
             loading.style.display = 'inline-block';
-            
+            overlay.style.display = 'flex';
+
             try {
                 const response = await fetch('/api/v1/scrape/trigger', {
                     method: 'POST'
                 });
                 const result = await response.json();
-                
+
                 if (result.success) {
                     await loadOdds();
+                    showToast('Odds updated successfully!', 'success');
+                } else {
+                    showToast('Failed to update odds', 'error');
                 }
             } catch (error) {
                 console.error('Error triggering scrape:', error);
+                showToast('Error updating odds', 'error');
             } finally {
                 btn.textContent = 'Refresh Odds';
                 loading.style.display = 'none';
+                overlay.style.display = 'none';
             }
         }
 
+        // Filter matches by search term
+        function filterMatches() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const cards = document.querySelectorAll('.match-card');
+
+            cards.forEach(card => {
+                const teams = card.getAttribute('data-teams');
+                const league = card.getAttribute('data-league').toLowerCase();
+                
+                if (teams.includes(searchTerm) || league.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            updateVisibleCount();
+        }
+
+        // Filter by league
+        function filterByLeague(league) {
+            // Update active tab
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Filter cards
+            const cards = document.querySelectorAll('.match-card');
+            cards.forEach(card => {
+                const cardLeague = card.getAttribute('data-league');
+                
+                if (league === 'all' || cardLeague === league) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            updateVisibleCount();
+        }
+
+        // Update visible match count
+        function updateVisibleCount() {
+            const visibleCards = document.querySelectorAll('.match-card[style*="block"], .match-card:not([style*="none"])');
+            document.getElementById('total-matches').textContent = visibleCards.length;
+        }
+
+        // Copy odds information
+        function copyOdds(siteName, odds, betType) {
+            if (!odds || !siteName) {
+                showToast('No odds data available', 'warning');
+                return;
+            }
+
+            const text = `${betType}: ${odds} (${siteName})`;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(`Copied: ${text}`, 'success');
+            }).catch(() => {
+                showToast('Failed to copy odds', 'error');
+            });
+        }
+
+        // Toggle auto-refresh
+        function toggleAutoRefresh() {
+            const icon = document.getElementById('auto-refresh-icon');
+            const text = document.getElementById('auto-refresh-text');
+
+            autoRefreshEnabled = !autoRefreshEnabled;
+
+            if (autoRefreshEnabled) {
+                icon.className = 'fas fa-pause me-1';
+                text.textContent = 'Auto';
+                startAutoRefresh();
+                showToast('Auto-refresh enabled', 'info');
+            } else {
+                icon.className = 'fas fa-play me-1';
+                text.textContent = 'Manual';
+                stopAutoRefresh();
+                showToast('Auto-refresh disabled', 'info');
+            }
+        }
+
+        // Start auto-refresh
+        function startAutoRefresh() {
+            if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+            autoRefreshInterval = setInterval(loadOdds, 5 * 60 * 1000); // 5 minutes
+        }
+
+        // Stop auto-refresh
+        function stopAutoRefresh() {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = null;
+            }
+        }
+
+        // Update statistics
+        function updateStats() {
+            document.getElementById('total-matches').textContent = oddsData.length;
+            
+            let bestOddsCount = 0;
+            oddsData.forEach(match => {
+                if (match.best_home_win || match.best_draw || match.best_away_win) {
+                    bestOddsCount++;
+                }
+            });
+            document.getElementById('best-odds').textContent = bestOddsCount;
+        }
+
+        // Update time ago
+        function updateTimeAgo() {
+            if (!lastUpdateTime) return;
+            
+            const now = new Date();
+            const diffMinutes = Math.floor((now - lastUpdateTime) / (1000 * 60));
+            document.getElementById('last-update').textContent = diffMinutes;
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            const toastContainer = document.querySelector('.toast-container');
+            const toastId = 'toast-' + Date.now();
+            
+            const iconMap = {
+                success: 'fas fa-check-circle text-success',
+                error: 'fas fa-exclamation-circle text-danger',
+                warning: 'fas fa-exclamation-triangle text-warning',
+                info: 'fas fa-info-circle text-info'
+            };
+
+            const toast = document.createElement('div');
+            toast.className = 'toast show';
+            toast.id = toastId;
+            toast.innerHTML = `
+                <div class="toast-body d-flex align-items-center">
+                    <i class="${iconMap[type]} me-2"></i>
+                    <span class="flex-grow-1">${message}</span>
+                    <button type="button" class="btn-close" onclick="document.getElementById('${toastId}').remove()"></button>
+                </div>
+            `;
+
+            toastContainer.appendChild(toast);
+
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (document.getElementById(toastId)) {
+                    document.getElementById(toastId).remove();
+                }
+            }, 5000);
+        }
+
+        // Show no data state
         function showNoData() {
             document.getElementById('no-data').style.display = 'block';
             document.getElementById('odds-container').style.display = 'none';
+            updateStats();
         }
 
+        // Hide loading spinner
         function hideLoading() {
             document.getElementById('loading-spinner').style.display = 'none';
         }
-
-        // Load odds on page load
-        document.addEventListener('DOMContentLoaded', loadOdds);
-
-        // Auto-refresh every 5 minutes
-        setInterval(loadOdds, 5 * 60 * 1000);
     </script>
 </body>
+
 </html>
